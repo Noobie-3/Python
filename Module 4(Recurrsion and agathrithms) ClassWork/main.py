@@ -1,6 +1,5 @@
 
 import traceback
-import os
 def fib(num):
     if num == 0:
         return 0
@@ -16,13 +15,8 @@ def main():
 
 
 main()
-traceback.print_stack()
 
 
-
-def virus():
-    print("yo")
-   
 
 
 
