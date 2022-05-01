@@ -1,6 +1,7 @@
 # AdCap Ripoff
 
 from multiprocessing import Manager
+from turtle import ycor
 import pygame
 pygame.init()
 
@@ -16,7 +17,7 @@ orange = (255,165,0)
 yellow = (255,255,0)
 
 #variables
-screen = pygame.display.set_mode([400, 500])
+screen = pygame.display.set_mode([430, 600])
 pygame.display.set_caption("Toltally not a ripoff of a popular idle game")
 background = black
 framerate = 60
@@ -40,7 +41,7 @@ yellow_speed = 4
 green_speed = 3
 blue_speed = 2
 purple_speed = 1
-score = 0
+score = 10000000000
 #draw buttons 
 #red buttons
 redCost = 1
@@ -95,14 +96,17 @@ def draw_task(color, yCord, value, draw, length, speed):
     screen.blit(value_text, (16, yCord - 10))
     return task, length, draw
 
-def draw_button(color, xCord, cost, owned, managerCost):
-    color_button = pygame.draw.rect(screen, color, [xCord, 385, 55, 50])
+def draw_button(color, xCord,yCord, cost, owned, managerCost):
+    color_button = pygame.draw.rect(screen, color, [xCord, yCord, 60, 40])
     color_cost = font.render(str(round(cost, 1)), True, black)
-    screen.blit(color_cost, (xCord + 6, 390))
+    screen.blit(color_cost, (xCord + 1, yCord))
+    yCord = yCord + 80
     if not owned:
-        managerButton = pygame.draw.rect(screen, color, [xCord, 440, 55, 30])
+        managerButton = pygame.draw.rect(screen, color, [xCord, yCord, 60, 40])
         managerText = color_cost = font.render(str(round(managerCost, 2)), True, black)
-        screen.blit(managerText, (xCord + 1, 440))
+        screen.blit(managerText, (xCord + 1, yCord))
+    else:
+        managerButton = pygame.draw.rect(screen, black, [xCord, yCord, 60, 40])
     return color_button, managerButton
     
     
@@ -111,22 +115,56 @@ def draw_button(color, xCord, cost, owned, managerCost):
 running = True
 while running:
     timer.tick(framerate)
+    #if manager is owner auto get moneys
+    if redOwned and not draw_red:
+        draw_red = True
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
+            
+            #Red button dection
             if task1.collidepoint(event.pos):
                 draw_red = True
+            if redManagerBuy.collidepoint(event.pos) and score >= redManagerCost and not redOwned:
+                redOwned = True
+                score -= redManagerCost
+                
+            #Orange button detection
             if task2.collidepoint(event.pos):
                 draw_orange = True
+            if orangeManagerBuy.collidepoint(event.pos) and score >= orangeManagerCost and not orangeOwned:
+                orangeOwned = True
+                score -= orangeManagerCost                
+            #yellow button detection
             if task3.collidepoint(event.pos):
                 draw_yellow = True
+            if yellowManagerBuy.collidepoint(event.pos) and score >= yellowManagerCost and not yellowOwned:
+                yellowOwned = True
+                score -= yellowManagerCost    
+                
+            #green button detection
             if task4.collidepoint(event.pos):
                 draw_green = True
+            if greenManagerBuy.collidepoint(event.pos) and score >= greenManagerCost and not greenOwned:
+                greenOwned = True
+                score -= greenManagerCost
+                
+            #blue button detection
             if task5.collidepoint(event.pos):
                 draw_blue = True
+            if blueManagerBuy.collidepoint(event.pos) and score >= blueManagerCost and not blueOwned:
+                blueOwned = True
+                score -= blueManagerCost  
+                
+            #purple button detectection
             if task6.collidepoint(event.pos):
                 draw_purple = True                
+            if purpleManagerBuy.collidepoint(event.pos) and score >= purpleManagerCost and not purpleOwned:
+                purpleOwned = True
+                score -= purpleManagerCost
+
+                
                 
                 
     # makes the play area populated with task to do
@@ -134,28 +172,27 @@ while running:
     
     #red task
     task1, red_length, draw_red = draw_task(red, 50, red_value, draw_red, red_length, red_speed)
-    redBuy, redManagerBuy = draw_button(red, 10, redCost, redOwned, redManagerCost)
+    redBuy, redManagerBuy = draw_button(red, 10, 410, redCost, redOwned, redManagerCost)
     
      #orange task
     task2, orange_length, draw_orange = draw_task(orange, 110, orange_value, draw_orange, orange_length, orange_speed)
-    orangeBuy, redManagerBuy = draw_button(orange, 70, orangeCost, orangeOwned, orangeManagerCost)
+    orangeBuy, orangeManagerBuy = draw_button(orange, 80, 410, orangeCost, orangeOwned, orangeManagerCost)
     
     #yellow task
     task3, yellow_length, draw_yellow = draw_task(yellow, 170, yellow_value, draw_yellow, yellow_length, yellow_speed)
-    yellowBuy, yellowyellowManagerBuy = draw_button(yellow, 130, yellowCost, yellowOwned, yellowManagerCost)
+    yellowBuy, yellowManagerBuy = draw_button(yellow, 150, 410, yellowCost, yellowOwned, yellowManagerCost)
     
     #green task
     task4, green_length, draw_green = draw_task(green, 230, green_value, draw_green, green_length, green_speed)
-    greenBuy, greenManagerBuy = draw_button(green, 190, greenCost, greenOwned, greenManagerCost)
+    greenBuy, greenManagerBuy = draw_button(green, 220, 410, greenCost, greenOwned, greenManagerCost)
     
     #blue task
     task5, blue_length, draw_blue = draw_task(blue, 290, blue_value, draw_blue, blue_length, blue_speed)
-    blueBuy, blueManagerBuy = draw_button(blue, 250, blueCost, blueOwned, blueManagerCost)
+    blueBuy, blueManagerBuy = draw_button(blue, 290, 410, blueCost, blueOwned, blueManagerCost)
     
     #purple task
     task6, purple_length, draw_purple = draw_task(purple, 350, purple_value, draw_purple, purple_length, purple_speed)
-    purpleBuy, purpleManagerBuy = draw_button(purple, 310, purpleCost, purpleOwned, purpleManagerCost)
-
+    purpleBuy, purpleManagerBuy= draw_button(purple, 360, 410, purpleCost, purpleOwned, purpleManagerCost)
 
  
 
@@ -163,6 +200,14 @@ while running:
     
     display_score = font.render('Money: $'+str(round(score,2)),True, white, black)
     screen.blit(display_score, (10, 5))
+    
+    #writes buy more?
+    buyMore = font.render("Buy More", True, white)
+    screen.blit(buyMore, (10, 385) )
+    #writes buy managers
+    buyManagers = font.render("Buy Managers", True, white)
+    screen.blit(buyManagers, (10, 465) )
+    
     
     pygame.display.flip()
 
