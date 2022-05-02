@@ -39,12 +39,27 @@ purple_length = 0
 red_speed = 6
 red_upgraded_speed = 12
 red_upgraded_speed2 = 24
+
 orange_speed = 5
+orange_upgraded_speed = 10
+orange_upgraded_speed2 = 20
+
 yellow_speed = 4
+yellow_upgraded_speed = 8
+yellow_upgraded_speed2 =16
+
 green_speed = 3
+green_upgraded_speed =6
+green_upgraded_speed2 = 12
+
 blue_speed = 2
+blue_upgraded_speed = 4
+blue_upgraded_speed2 = 8
+
 purple_speed = 1
-score = 0
+purple_upgraded_speed = 2
+purple_upgraded_speed2 = 4
+score =99
 
 
 #draw buttons 
@@ -53,37 +68,37 @@ score = 0
 redCost = 1
 redOwned = False
 redManagerCost = 100
-redAmount = 0
+redAmount = 99
 
 #orange button
 orangeCost = 2
 orangeOwned = False
 orangeManagerCost = 500
-orangeAmount = 0
+orangeAmount = 99
 
 #yellow button
 yellowCost = 3
 yellowOwned = False
 yellowManagerCost = 1900
-yellowAmount = 0
+yellowAmount = 99
 
 #green button
 greenCost = 4
 greenOwned = False
 greenManagerCost = 4000
-greenAmount = 0 
+greenAmount = 99
 
 #blue button
 blueCost = 5
 blueOwned = False
 blueManagerCost = 10000
-blueAmount = 0
+blueAmount = 99
 
 #purple button
 purpleCost = 6
 purpleOwned = False
 purpleManagerCost = 100000
-purpleAmount = 0
+purpleAmount = 99
 
 
 
@@ -223,7 +238,7 @@ while running:
                 score -= greenCost 
                 greenCost += .4
                 greenAmount =+ 1
-            if redAmount >= 100:
+            if greenAmount >= 100:
                 green_speed = green_upgraded_speed2
             elif greenAmount >=10:
                 green_speed = green_upgraded_speed
