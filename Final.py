@@ -1,9 +1,12 @@
-# AdCap Ripoff
-
-from ast import While
-from multiprocessing import Manager
-from turtle import ycor
+# AdCap Ripoff - Jed Stone
+from multiprocessing.sharedctypes import Value
+from turtle import onclick
 import pygame
+import tkinter
+import random
+import time
+
+from setuptools import Command
 pygame.init()
 
 
@@ -18,7 +21,7 @@ orange = (255,165,0)
 yellow = (255,255,0)
 
 # general variables
-screen = pygame.display.set_mode([500, 680])
+screen = pygame.display.set_mode([500, 800])
 pygame.display.set_caption("Toltally not a ripoff of a popular idle game")
 background = black
 framerate = 60
@@ -39,6 +42,14 @@ purple_length = 0
 red_speed = 6
 red_upgraded_speed = 12
 red_upgraded_speed2 = 24
+random.seed(time.time())
+WINYAY = [1,2,3,4,5]
+WINNUM = random.randint(WINYAY[0], WINYAY[4])
+count = WINNUM
+EzOwned = False
+    
+
+
 
 orange_speed = 5
 orange_upgraded_speed = 10
@@ -59,7 +70,7 @@ blue_upgraded_speed2 = 8
 purple_speed = 1
 purple_upgraded_speed = 2
 purple_upgraded_speed2 = 4
-score =99
+score =0
 
 
 #draw buttons 
@@ -68,37 +79,37 @@ score =99
 redCost = 1
 redOwned = False
 redManagerCost = 100
-redAmount = 99
+redAmount = 0
 
 #orange button
 orangeCost = 2
 orangeOwned = False
 orangeManagerCost = 500
-orangeAmount = 99
+orangeAmount = 0
 
 #yellow button
 yellowCost = 3
 yellowOwned = False
 yellowManagerCost = 1900
-yellowAmount = 99
+yellowAmount = 0
 
 #green button
 greenCost = 4
 greenOwned = False
 greenManagerCost = 4000
-greenAmount = 99
+greenAmount = 0
 
 #blue button
 blueCost = 5
 blueOwned = False
 blueManagerCost = 10000
-blueAmount = 99
+blueAmount = 0
 
 #purple button
 purpleCost = 6
 purpleOwned = False
 purpleManagerCost = 100000
-purpleAmount = 99
+purpleAmount = 0
 
 
 
@@ -112,6 +123,11 @@ green_value = 4
 blue_value = 5
 purple_value = 6
 
+def CongratsMsg():
+    tkinter.messagebox.showinfo("A MILLON!!!!", "Congrats on reaching a millon im so pround of you that im stealing all your money ;)")
+    
+
+
 def draw_task(color, yCord, value, draw, length, speed, amountOwned):
     global score
     if draw and length < 200:
@@ -120,12 +136,12 @@ def draw_task(color, yCord, value, draw, length, speed, amountOwned):
         draw = False 
         length = 0
         score += value 
-    task = pygame.draw.circle(screen, color, (175, yCord ), 20, 5)
-    pygame.draw.rect(screen, color, [200, yCord - 15, 200, 30])
-    pygame.draw.rect(screen, black, [205, yCord - 10, 190, 20])
-    pygame.draw.rect(screen, color, [200,yCord - 15, length,30])
+    task = pygame.draw.circle(screen, color, (210, yCord ), 23, 4)
+    pygame.draw.rect(screen, color, [235, yCord - 15, 200, 30])
+    pygame.draw.rect(screen, black, [240, yCord - 10, 190, 20])
+    pygame.draw.rect(screen, color, [235,yCord - 15, length,30])
     value_text = font.render(str(round(value, 2)), True, white)
-    screen.blit(value_text, (160, yCord - 10))
+    screen.blit(value_text, (195, yCord - 10))
     Amount_Owned = font.render('Amount Owned:'+str(round(amountOwned)), True, white)
     screen.blit(Amount_Owned,(10, yCord - 10))
     return task, length, draw
@@ -142,14 +158,38 @@ def draw_button(color, xCord,yCord, cost, owned, managerCost):
     else:
         managerButton = pygame.draw.rect(screen, black, [xCord, yCord, 60, 40])
     return color_button, managerButton
-    
-    
+
+def draw_buttonEZ(color, xCord, yCord,owned):
+    if not owned:
+        Ezbutton = pygame.draw.rect(screen, color, [xCord, yCord, 60, 40])
+        EZText = font.render(str("ez start"), True, black)
+        screen.blit(EZText, (xCord + 1, yCord))
+        
+    else:
+         Ezbutton = pygame.draw.rect(screen, black, [xCord, yCord, 60, 40])
+    return Ezbutton
+
+        
+        
+
+
+#ez start mode
+def EZstart():
+    global count
+    while count >= 1:
+        global score
+        score += (WINNUM * 10000)
+        count -= 1
+        EZstart()    
+
     
 #if game is running do this
 running = True
 while running:
     timer.tick(framerate)
     
+
+        
     #if manager is owned auto get moneys
     #red
     if redOwned and not draw_red:
@@ -237,7 +277,7 @@ while running:
                 green_value += .35
                 score -= greenCost 
                 greenCost += .4
-                greenAmount =+ 1
+                greenAmount += 1
             if greenAmount >= 100:
                 green_speed = green_upgraded_speed2
             elif greenAmount >=10:
@@ -277,6 +317,11 @@ while running:
                 purple_speed = purple_upgraded_speed2
             elif purpleAmount >=10:
                 purple_speed = purple_upgraded_speed                
+            #ezStart button detection
+            if EzStartButton.collidepoint(event.pos):
+                EZstart()
+                EzOwned = True
+                
                                         
                 
     # makes the play area populated with task to do
@@ -305,6 +350,10 @@ while running:
     #purple task
     task6, purple_length, draw_purple = draw_task(purple, 350, purple_value, draw_purple, purple_length, purple_speed, purpleAmount)
     purpleBuy, purpleManagerBuy= draw_button(purple, 360, 410, purpleCost, purpleOwned, purpleManagerCost)
+    
+    #ex start button
+    EzStartButton = draw_buttonEZ(white, 200,700,EzOwned)
+
 
  
 
@@ -334,7 +383,11 @@ while running:
     screen.blit(info, (20, 625))
     #writes how much somthing will bring when you press a button
     priceInfo = font.render('Price', True, white)
-    screen.blit(priceInfo, (158, 5))
+    screen.blit(priceInfo, (190, 5))
+    
+
+        
+    
     
     pygame.display.flip()
 
