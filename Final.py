@@ -381,6 +381,11 @@ while running:
     screen.blit(info, (20, 610))
     info = font.render('happenes once again when you own 100 of an item', True, white)
     screen.blit(info, (20, 625))
+
+    info = font.render('Use Ez start for verifying all things work as intended', True, white)
+    screen.blit(info, (20, 655))
+    info = font.render('It gives a random amount of money for easy debugging', True, white)
+    screen.blit(info, (20, 670))
     #writes how much somthing will bring when you press a button
     priceInfo = font.render('Price', True, white)
     screen.blit(priceInfo, (190, 5))
